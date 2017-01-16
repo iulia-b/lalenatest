@@ -1,0 +1,32 @@
+<!doctype html>
+<head>
+  <link rel="stylesheet" href="http://soundcloud.github.io/sc.css/css/sc.css">
+  <style>
+    .player {
+      margin: 20px;
+    }
+  </style>
+</head>
+<body>
+  <div class="player">
+    <button id="play-button-long" class="sc-button sc-button-large sc-button-play"></button>
+    <span class="sc-type-h1">A long sound</span><br>
+    <canvas id="waveform-long" width="800" height="100"></canvas>
+  </div>
+
+  <div class="player">
+    <button id="play-button-short" class="sc-button sc-button-large sc-button-play"></button>
+    <span class="sc-type-h1">A short sound</span><br>
+    <canvas id="waveform-short" width="800" height="100"></canvas>
+  </div>
+
+  <script>SC = {};</script>
+  <script src="jquery-3.0.0.js"></script>
+  <script src="underscore.js"></script>
+  <script src="events.js"></script>
+  <script src="sound.js"></script>
+  <script src="waveform.js"></script>
+  <script src="fixtures/long-sound.js"></script>
+  <script src="fixtures/short-sound.js"></script>
+  <script src="main.js"></script>
+</body>

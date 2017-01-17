@@ -182,3 +182,18 @@ h2 {
 	transform: translatey(-100%);
 }
 
+.fadeTransition {
+	-webkit-transition: opacity 1s ease-in-out;
+	-moz-transition: opacity 1s ease-in-out;
+	-ms-transition: opacity 1s ease-in-out;
+	-o-transition: opacity 1s ease-in-out;
+	transition: display 0s, opacity 3s ease-in-out;
+}
+
+.fadeOut {
+	zoom: 1;
+    filter: alpha(opacity=50);
+    opacity: 0;
+    display: none;
+}
+

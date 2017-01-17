@@ -9,13 +9,25 @@ window.addEventListener("DOMContentLoaded", function() {
 
 	var initHandlers = function() {
 		control.onclick = function() {
+			var pb = playingMode.getElementsByClassName('button play')[0];
 			playButton.toggle();
 			userProfile.slideUp();
+			pauseButton.classList.add('fadeOut');
+
+			isPlaying = true;
 		};
 
 		playingMode.onclick = function() {
+			var pb = playingMode.getElementsByClassName('button play')[0];			
 			overlay.toggle();
-			pauseButton.toggle();
+			pb.toggle();
+			//	pauseButton.toggle();
+			if (isPlaying) {
+				pauseButton.classList.remove('fadeOut');				
+			} else {
+				pauseButton.classList.add('fadeOut');
+			}
+			isPlaying = !isPlaying;
 		}
 	}
 

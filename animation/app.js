@@ -9,21 +9,18 @@ window.addEventListener("DOMContentLoaded", function() {
 
 	var initHandlers = function() {
 		control.onclick = function() {
-			var pb = playingMode.getElementsByClassName('button play')[0];
 			playButton.toggle();
 			userProfile.slideUp();
-			pauseButton.classList.add('fadeOut');
 
+			pauseButton.toggle('fadeOut');
 			isPlaying = true;
 		};
 
 		playingMode.onclick = function() {
-			var pb = playingMode.getElementsByClassName('button play')[0];			
 			overlay.toggle();
-			pb.toggle();
-			//	pauseButton.toggle();
+			pauseButton.toggleClass('pause', 'play');
 			if (isPlaying) {
-				pauseButton.classList.remove('fadeOut');				
+				pauseButton.toggle('fadeOut');
 			} else {
 				pauseButton.classList.add('fadeOut');
 			}
@@ -36,11 +33,22 @@ window.addEventListener("DOMContentLoaded", function() {
 			this.classList.add('slideUp');
 		}
 
-		HTMLElement.prototype.toggle = function() {
-			if (this.classList.contains('hide')) {
-				this.classList.remove('hide');
+		HTMLElement.prototype.toggle = function(a) {
+			a = a || 'hide';
+			if (this.classList.contains(a)) {
+				this.classList.remove(a);
 			} else {
-				this.classList.add('hide');
+				this.classList.add(a);
+			}
+		}
+
+		HTMLElement.prototype.toggleClass = function(a, b) {
+			if (this.classList.contains(a)) {
+				this.classList.remove(a);
+				this.classList.add(b);
+			} else {
+				this.classList.remove(b);
+				this.classList.add(a);
 			}
 		}
 	}

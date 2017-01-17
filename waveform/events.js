@@ -147,8 +147,6 @@
     }
   };
 
-
-
   var listenMethods = {listenTo: 'on', listenToOnce: 'once'};
 
   // An inversion-of-control versions of `on` and `once`. Tell *this* object to listen to

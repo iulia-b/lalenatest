@@ -12,19 +12,15 @@ window.addEventListener("DOMContentLoaded", function() {
 			playButton.toggle();
 			userProfile.slideUp();
 
+			pauseButton.toggle('fadeTransition');
 			pauseButton.toggle('fadeOut');
-			isPlaying = true;
 		};
 
 		playingMode.onclick = function() {
 			overlay.toggle();
 			pauseButton.toggleClass('pause', 'play');
-			if (isPlaying) {
-				pauseButton.toggle('fadeOut');
-			} else {
-				pauseButton.classList.add('fadeOut');
-			}
-			isPlaying = !isPlaying;
+			pauseButton.toggle('fadeTransition');
+			pauseButton.toggle('fadeOut');
 		}
 	}
 

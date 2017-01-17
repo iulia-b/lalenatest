@@ -12,31 +12,62 @@
       this.canvasHeight = jqcanvas.height();
       this.canvasWidth = jqcanvas.width();
 
+      jqcanvas.on('click', e => this.handleCanvasClickEvent(e));
+
+      this.data = this.sound.waveformData;
+      this.ctx = this.canvas.getContext('2d');
+
       this.sound.on('timeUpdate', this.update, this);
+
+      this.initBaseValues();
+      this.initConst();
     }
 
     // Draw the canvas the first time. This is called once only, and before any calls to `update()`.
     render() {
+      this.lastPlaytime = this.canvas.offsetWidth;
       this.update();
+      this.lastPlaytime = 0;
     }
 
     // Update the visual state of the waveform so that it accurately represents the play progress of its sound.
     update() {
-      const data = this.sound.waveformData;
-      const ctx = this.canvas.getContext('2d');
+     
+      //this.ctx.clearRect(0, 0, Infinity, Infinity);
+      let start = Math.min(this.lastPlaytime, this.sound.currentTime);
+      let end = Math.max(this.lastPlaytime, this.sound.currentTime);
 
-      ctx.clearRect(0, 0, Infinity, Infinity);
+      let colorBase = this.sound.currentTime / this.sound.duration * this.canvasWidth;
+      for (let x = start; x < end; x++) {
 
-      for (let x = 0; x < this.canvas.offsetWidth; x++) {
-
-        const sampleInd = Math.floor(x * data.width / this.canvasWidth);
-        const value = Math.floor(this.canvasHeight * data.samples[sampleInd] / data.height / 2);
-
-        for (let y = value; y < this.canvasHeight - value; y++) {
-          ctx.fillStyle = x < this.sound.currentTime / this.sound.duration * this.canvasWidth ? '#f60' : '#333';
-          ctx.fillRect(x, y, 1, 1);
-        }
+        const sampleInd = Math.floor(x * this.sampleInd_base);
+        const value = Math.floor(this.value_base * this.data.samples[sampleInd] );
+        
+        this.ctx.fillStyle = x < colorBase
+                            ? this.COLOR_SOUND 
+                            : this.COLOR_UNSOUND;
+        // The second for is not needed as it is drawing a rectangle
+        // It is enough to compute Y axis values
+        // it start from value and goes to (this.canvas - value) - value + 1                            
+        this.ctx.fillRect(x, value, 1, this.canvasHeight - 2*value + 1);
       }
+    }
+
+    handleCanvasClickEvent(e) {
+      this.sound.currentTime = e.offsetX;
+    }
+
+    initBaseValues() {      
+      this.sampleInd_base = this.data.width / this.canvasWidth;
+      this.value_base = this.canvasHeight / this.data.height / 2;
+
+      this.lastPlaytime = 0;
+      this.currentSeek = 0;
+    }
+
+    initConst() {
+      this.COLOR_UNSOUND = '#333333';
+      this.COLOR_SOUND = '#ff6600';
     }
   };
 

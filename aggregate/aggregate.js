@@ -21,6 +21,7 @@ soundcloud.aggregate = function() {
 	var mergeList = function(list) {
 		var processed = {};
 
+		// Using reduceRight to preserve the backwards order - "the element should be inserted in the should take the place of the latest occurrence of that id"
 		return list.reduceRight((acc, current, i) => {
 			if (processed.hasOwnProperty(current.id)) {
 				return acc;
@@ -33,6 +34,8 @@ soundcloud.aggregate = function() {
 					mergeItems(list[j], newItem);
 				}
 			}
+
+			// Inserting element in the beginning of the list to not have to inverse it in the end because of loopinf from right to left			
 			acc.unshift(newItem);
 			return acc;
 		}, []);
@@ -43,16 +46,17 @@ soundcloud.aggregate = function() {
 			return list;
 		}
 
+		// If merge is defined, it will be the first operation, so filtering is done on merged list
 		var result = options.merge? mergeList(list) : list;
 
 		return result.filter( e => {
-			var check = true;
-			check = options.id ? e.id === options.id : true;
-			check &= options.minPlayTime ? e.playTime >= options.minPlayTime : true;
-			check &= options.auto ? e.auto === options.auto : true;
-
-			return check;
-		});
+			// Applying all filters; will return false for the first false one
+			// If filter is not defined, !filter will escape the checkup
+			return (!options.id || (options.id && e.id === options.id))
+				&& (!options.minPlayTime || (e.playTime >= options.minPlayTime))
+				&& (!options.auto || (e.auto === options.auto));
+			}
+		);
 	}
 
 	return {

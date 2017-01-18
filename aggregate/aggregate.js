@@ -26,9 +26,9 @@ soundcloud.aggregate = class Aggregate {
 		}
 
 		// If merge is defined, it will be the first operation so filtering is performed on merged list
-		var result = options.merge? this._mergeList(list) : list;
+		var result = options.merge ? this._mergeList(list) : list;
 
-		return result.filter( e => {
+		return result.filter(e => {
 			// Applying all filters; will return false for the first false one
 			// If filter is not defined, !filter will escape the checkup
 			return (!options.id || (options.id && e.id === options.id))

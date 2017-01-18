@@ -55,7 +55,7 @@
 
       this.updateSegment(start, end);
 
-      this.lastPlaytime = this.sound.currentTime;
+      //this.lastPlaytime = this.sound.currentTime;
       
     }
 

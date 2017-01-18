@@ -8,20 +8,20 @@ window.addEventListener("DOMContentLoaded", function() {
 	var playButton = userProfile.getElementsByClassName('button play')[0];
 
 	var initHandlers = function() {
-		control.onclick = function() {
+		control.addEventListener('click', function() {
 			playButton.toggle();
 			userProfile.slideUp();
 
 			pauseButton.toggleClass('fadeTransition');
 			pauseButton.toggleClass('fadeOut');
-		};
+		});
 
-		playingMode.onclick = function() {
+		playingMode.addEventListener('click', function() {
 			overlay.toggle();
 			pauseButton.toggleClass('pause', 'play');
 			pauseButton.toggleClass('fadeTransition');
 			pauseButton.toggleClass('fadeOut');
-		}
+		});
 	}
 
 	var initDomMethods = function(hide) {
@@ -46,5 +46,6 @@ window.addEventListener("DOMContentLoaded", function() {
 
 	initDomMethods();
 	initHandlers();
+
 
 }, false);

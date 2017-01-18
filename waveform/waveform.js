@@ -15,7 +15,6 @@
       jqcanvas.on('click', e => this.handleCanvasClickEvent(e));
 
       this.data = this.sound.waveformData;
-      this.ctx = this.canvas.getContext('2d');
 
       this.sound.on('timeUpdate', this.update, this);
 
@@ -25,18 +24,12 @@
 
     // Draw the canvas the first time. This is called once only, and before any calls to `update()`.
     render() {
-      this.lastPlaytime = this.canvas.offsetWidth;
-      this.update();
-      this.lastPlaytime = 0;
+      this.ctx = this.canvas.getContext('2d');
+
+      this.updateSegment(0, this.canvas.width);
     }
 
-    // Update the visual state of the waveform so that it accurately represents the play progress of its sound.
-    update() {
-     
-      //this.ctx.clearRect(0, 0, Infinity, Infinity);
-      let start = Math.min(this.lastPlaytime, this.sound.currentTime);
-      let end = Math.max(this.lastPlaytime, this.sound.currentTime);
-
+    updateSegment(start, end) {
       let colorBase = this.sound.currentTime / this.sound.duration * this.canvasWidth;
       for (let x = start; x < end; x++) {
 
@@ -51,6 +44,23 @@
         // it start from value and goes to (this.canvas - value) - value + 1                            
         this.ctx.fillRect(x, value, 1, this.canvasHeight - 2*value + 1);
       }
+    }
+
+    // Update the visual state of the waveform so that it accurately represents the play progress of its sound.
+    update() {
+     
+      //this.ctx.clearRect(0, 0, Infinity, Infinity);
+      let start = Math.min(this.lastPlaytime, this.sound.currentTime);
+      let end = Math.max(this.lastPlaytime, this.sound.currentTime);
+
+      this.updateSegment(start, end);
+
+      this.lastPlaytime = this.sound.currentTime;
+      
+    }
+
+    seek() {
+      
     }
 
     handleCanvasClickEvent(e) {

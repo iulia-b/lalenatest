@@ -26,12 +26,13 @@ soundcloud.aggregate = class Aggregate {
 		}
 
 		// If merge is defined, it will be the first operation so filtering is performed on merged list
-		var result = options.merge ? this._mergeList(list) : list;
+		let result = options.merge ? this._mergeList(list) : list;
 
 		return result.filter(e => {
 			// Applying all filters; will return false for the first false one
 			// If filter is not defined, !filter will escape the checkup
-			return (!options.id || (options.id && e.id === options.id))
+			// *minPlayTime can be 0, which is valid value, in which case condition will be evaluated and pass; would be more important if it were maxPlayTime
+			return (!options.id || (e.id === options.id))
 				&& (!options.minPlayTime || (e.playTime >= options.minPlayTime))
 				&& (!options.auto || (e.auto === options.auto));
 			}
@@ -71,16 +72,16 @@ Array.prototype.toListString = function() {
 	return JSON.stringify(this, null, 4);
 }
 
-var solution = new soundcloud.aggregate();
+let solution = new soundcloud.aggregate();
 
-var items = [
-    { id: 8, playTime:  500, auto: false },
-    { id: 7, playTime: 1500, auto: true  },
-    { id: 1, playTime:  100, auto: true  },
-    { id: 7, playTime: 1000, auto: false },
-    { id: 7, playTime: 2000, auto: false },
-    { id: 2, playTime: 2000, auto: true  },
-    { id: 2, playTime: 2000, auto: true  }
+let items = [
+	{ id: 8, playTime:  500, auto: false },
+	{ id: 7, playTime: 1500, auto: true  },
+	{ id: 1, playTime:  100, auto: true  },
+	{ id: 7, playTime: 1000, auto: false },
+	{ id: 7, playTime: 2000, auto: false },
+	{ id: 2, playTime: 2000, auto: true  },
+	{ id: 2, playTime: 2000, auto: true  }
 ]
 
 //console.log(solution.select(items).toListString());

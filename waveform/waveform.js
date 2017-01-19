@@ -12,7 +12,7 @@
       this.canvasHeight = jqcanvas.height();
       this.canvasWidth = jqcanvas.width();
 
-      jqcanvas.on('click', e => this.handleCanvasClickEvent(e));
+      jqcanvas.parent().on('click', e => this.handleCanvasClickEvent(e));
 
       this.data = this.sound.waveformData;
 
@@ -24,21 +24,19 @@
 
     // Draw the canvas the first time. This is called once only, and before any calls to `update()`.
     render() {
-      this.ctx = this.canvas.getContext('2d');
 
-      this.updateSegment(0, this.canvas.width);
+      this.ctx = this.canvas.getContext('2d');
+      this.updateSegment(0, this.canvas.width, this.COLOR_UNSOUND);
+      this.lastPlaytime = 0;
     }
 
-    updateSegment(start, end) {
-      let colorBase = this.sound.currentTime / this.sound.duration * this.canvasWidth;
+    updateSegment(start, end, color) {
+      console.log(start, end);
       for (let x = start; x < end; x++) {
 
-        const sampleInd = Math.floor(x * this.sampleInd_base);
+        const sampleInd = Math.floor(x * this.sampleInd_base );
         const value = Math.floor(this.value_base * this.data.samples[sampleInd] );
-        
-        this.ctx.fillStyle = x < colorBase
-                            ? this.COLOR_SOUND 
-                            : this.COLOR_UNSOUND;
+        this.ctx.fillStyle = color;
         // The second for is not needed as it is drawing a rectangle
         // It is enough to compute Y axis values
         // it start from value and goes to (this.canvas - value) - value + 1                            
@@ -52,22 +50,32 @@
       //this.ctx.clearRect(0, 0, Infinity, Infinity);
       let start = Math.min(this.lastPlaytime, this.sound.currentTime);
       let end = Math.max(this.lastPlaytime, this.sound.currentTime);
+      this.lastPlaytime = end;
 
-      this.updateSegment(start, end);
+      start = Math.floor(start * this.canvasWidth / this.sound.duration );
+      end = Math.floor(end * this.canvasWidth / this.sound.duration );
 
-      //this.lastPlaytime = this.sound.currentTime;
-      
+      this.updateSegment(start, end, this.COLOR_SOUND);
     }
 
-    seek() {
-      
-    }
 
     handleCanvasClickEvent(e) {
-      this.sound.currentTime = e.offsetX;
+       this.currentSeek = e.offsetX;
+
+      let start = Math.min(this.lastPlaytime, this.currentSeek);
+      let end = Math.max(this.lastPlaytime, this.currentSeek);
+      
+      let color = this.lastPlaytime > this.currentSeek
+        ? this.COLOR_UNSOUND 
+        :  this.COLOR_SOUND;
+
+      this.lastPlaytime = this.currentSeek;
+
+      this.updateSegment(start, end, color);
+
     }
 
-    initBaseValues() {      
+    initBaseValues() {
       this.sampleInd_base = this.data.width / this.canvasWidth;
       this.value_base = this.canvasHeight / this.data.height / 2;
 

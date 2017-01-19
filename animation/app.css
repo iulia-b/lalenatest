@@ -127,14 +127,13 @@ h2 {
 .playing-mode .song-waveform {
 	position: absolute;
 	bottom: 5%;
-	height: 23vw;
 	width: 100%;
 	text-align: center;
 }
 
-.playing-mode .song-waveform 3 {
-	width: 90%;
-	height: 90%;
+img.waveform {
+	padding-right: 3vw;
+	padding-left: 3vw;
 }
 
 /* Set styles for button controls */

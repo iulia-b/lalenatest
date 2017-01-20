@@ -30,11 +30,9 @@ soundcloud.aggregate = class Aggregate {
 
 		return result.filter(e => {
 			// Applying all filters; will return false for the first false one
-			// If filter is not defined, !filter will escape the checkup
-			// *minPlayTime can be 0, which is valid value, in which case condition will be evaluated and pass; would be more important if it were maxPlayTime
-			return (!options.id || (e.id === options.id))
-				&& (!options.minPlayTime || (e.playTime >= options.minPlayTime))
-				&& (!options.auto || (e.auto === options.auto));
+			return (options.id === undefined || (e.id === options.id))
+				&& (options.minPlayTime === undefined || (e.playTime >= options.minPlayTime))
+				&& (options.auto === undefined || (e.auto === options.auto));
 			}
 		);
 	}
@@ -52,7 +50,6 @@ soundcloud.aggregate = class Aggregate {
 			// If it's a new empty object, copy current's values; otherwise, update existing one as specified
 			song.updateBy(current);
 
-			
 			if (!wasSeenBefore) {
 				// Add element to the beginning of the array so that the natural order of list traversing is preserved
 				acc.itemsList.unshift(song);
@@ -84,8 +81,9 @@ let items = [
 	{ id: 2, playTime: 2000, auto: true  }
 ]
 
-//console.log(solution.select(items).toListString());
+console.log(solution.select(items).toListString());
 console.log(solution.select(items, { merge: true }).toListString());
 console.log(solution.select(items, { id: 2 }).toListString());
+console.log(solution.select(items, { auto: false }).toListString());
 console.log(solution.select(items, { minPlayTime: 4000 }).toListString());
 console.log(solution.select(items, { merge: true, minPlayTime: 4000 }).toListString());

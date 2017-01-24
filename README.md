@@ -12,7 +12,14 @@ The accumulator I am using is an object with interface
 
 where itemsMap[id] represents the "accumulator" for every sond with ID id, and itemsList is an Array keeping reference towards itemsMap values, but sorted according to requirements.
 
-PS: I like how in the tests for select you did not add { auto: false }. I initially checked the filter existence by if (!object.auto) which would return true for both false and undefined. 
+In order to run the method, open a node.js shell in current directory and run
+	var solution = require('/aggregate.js');
+You can then run
+	solution.select(list, [, options])
+	 or
+	solution.select.usage() so see examples of how to call it
+	
+PS: I like how in the tests for select you did not add { auto: false }. I initially checked the filter existence by if (!object.auto) which would return true for both false and undefined and would not apply false filter
 
 
 ### Animation

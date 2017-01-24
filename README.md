@@ -18,8 +18,9 @@ You can then run
 	solution.select(list, [, options])
 	 or
 	solution.select.usage() so see examples of how to call it
-	
-PS: I like how in the tests for select you did not add { auto: false }. I initially checked the filter existence by if (!object.auto) which would return true for both false and undefined and would not apply false filter
+
+
+Side node: I like how in the tests for select you did not add { auto: false }. I initially checked the filter existence by if (!object.auto) which would return true for both false and undefined and would not apply false filter
 
 
 ### Animation
@@ -41,7 +42,7 @@ Other expensive operations that I optimized in my refactoring:
 
  - as the canvas is not resizable, the getContext method can be called only once. The reason i've put it into render() and not in constructor is semantics: creating a Waveform object should initialize basic properties and it's not tied to the visual represantation of it. 
 
- - actually, everything connected to the visual represantation should be initialized and computed when the object is rendered => moving some initializations from constructor into render
+ - actually, everything connected to the visual represantation should be initialized and computed when the object is rendered => moving some initializations from constructor into render method
 
  - extract constants which are used in for loops outside the loop to avoid repetition of Math operations
 

@@ -1,4 +1,6 @@
 SC.loadImages = (() => {
+  // Presumably the avatar size of a picture is in avarage 3kb so loading 50 pictures at a time would be efficient network wise
+  const BATCH_SIZE = 100;
   /**
    * Given an array of urls, load these images. When they are all loaded (or errored), then resolve a deferred with an
    * array of image elements ready to be drawn onto the canvas.
@@ -8,7 +10,7 @@ SC.loadImages = (() => {
    * @param {Array.<String>} urls
    * @return {Deferred}      This is resolved with {Array.<Image>}
    */
-  function loadImages(urls) {
+  function loadImagesOld(urls) {
     log(`Starting to load ${urls.length} images`);
 
     const allDone = $.Deferred();
@@ -28,6 +30,42 @@ SC.loadImages = (() => {
     });
 
     return allDone;
+  }
+
+  function loadImages(urls) {
+    log(`Starting to load ${urls.length} images`);
+
+    const allDone = $.Deferred();
+
+    allDone.fail(() => {
+      log(`Loading ${urls.length} images cancelled`);
+    });
+
+    loadInBatches(allDone, urls, []);
+    
+    return allDone;    
+  }
+
+  function loadInBatches($q, urls, loaded) {
+    if (!urls || urls.length === 0 || $q.state() !== 'pending') {
+      $q.resolve(loaded);
+      console.log('finished batches or canceled');
+      return;
+    }
+
+    const startTime = Date.now();
+    const deferreds = urls.splice(0, BATCH_SIZE).map(loadImage);
+
+    $.when.apply($, deferreds).then((...images) => {
+      log(`Loading ${urls.length} took ${Date.now() - startTime}ms`);
+      
+      loadInBatches($q, urls, loaded.concat(images));
+      // pick out the Image elements from the resolution values of each deferred,
+      // and resolve the overall deferred with these images.
+      // allDone.resolve(images.filter(Boolean));
+    }).catch((err) => {
+      log(`not necesarily failed but smt bad happened`);
+    });
   }
 
   /**

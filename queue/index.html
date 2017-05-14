@@ -1,0 +1,45 @@
+<!doctype html>
+<head>
+  <link rel="stylesheet" href="http://soundcloud.github.io/sc.css/css/sc.css">
+  <style>
+  .waveform-background {
+    margin: 15px 0;
+    width: 645px;
+    height: 60px;
+    background-image: url(fake-waveform.png);
+  }
+  #log {
+    font-family: monospace;
+    list-style: none;
+  }
+  #theButton {
+    position: absolute;
+    top: 10px;
+    right: 0;
+  }
+  #container {
+    position: relative;
+    width: 645px;
+    margin: auto;
+  }
+  </style>
+</head>
+<body>
+  <div id="container">
+    <h1>Waveform image loading</h1>
+    <button id="theButton" class="sc-button sc-button-cta sc-button-medium">Start</button>
+
+    <div class="waveform-background">
+      <canvas id="waveform" height="60" width="645"></canvas>
+    </div>
+    <ul id="log"></ul>
+  </div>
+
+  <!-- please excuse the crude script loading... -->
+  <script>SC = {};</script>
+  <script src="jquery-3.0.0.js"></script>
+  <script src="underscore.js"></script>
+  <script src="avatars.js"></script>
+  <script src="load-images.js"></script>
+  <script src="main.js"></script>
+</body>

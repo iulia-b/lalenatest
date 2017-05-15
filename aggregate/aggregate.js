@@ -1,91 +1,88 @@
 'use strict';
 
-var soundcloud = soundcloud || {};
 
-soundcloud.Song = function(id, playTime, auto) {
-	this.id = id;
-	this.playTime = playTime;
-	this.auto = auto;
+class Song {
+
+	constructor() {
+		this.id = 0;
+		this.playTime = 0;
+		this.auto = true;
+	}
+
+	updateBy(item) {
+		this.id = item.id;
+		this.playTime += item.playTime;
+		this.auto = this.auto && item.auto;
+	}
 }
 
-soundcloud.aggregate = function() {
-	var mergeItems = function (source, target) {
-		// I use source and target to avoid creating a new object everytime this is called
-		// Instead, I am changing the 'target' argument - value is preserved outside the scope because JS passes args by refference
-		// This calls for some attention from the programmer - usually you don't expect args to be changed;
-		// I can also return a new object with new values (but I am greedy on memory)
-		target.playTime += source.playTime;
-		target.auto = target.auto && source.auto;
+var select = function(list, options) {
+	if (!options) {
+		// Return a copy of current list so further changes on the return value will not influence current list
+		return list && list.slice();
 	}
 
-	var mergeList = function(list) {
-		var processed = {};
+	// If `merge` is defined, it will be the first operation so filtering is performed on merged list
+	let result = options.merge ? mergeList(list) : list;
 
-		return list.reduceRight((acc, current, i) => {
-			if (processed.hasOwnProperty(current.id)) {
-				return acc;
-			}
+	return result.filter(e => {
+		// Applying all filters; will return false for the first false one
+		return (options.id === undefined || (e.id === options.id))
+			&& (options.minPlayTime === undefined || (e.playTime >= options.minPlayTime))
+			&& (options.auto === undefined || (e.auto === options.auto));
+		}
+	);
+}
 
-			processed[current.id] = true;
-			var newItem = new soundcloud.Song(current.id, current.playTime, current.auto);
-			for (var j = 0; j < i; j++) {
-				if(newItem.id === list[j].id) {
-					mergeItems(list[j], newItem);
-				}
-			}
-			acc.unshift(newItem);
-			return acc;
-		}, []);
-	}
+var mergeList = function(list) {
+	// Use reduceRight to preserve the backwards order - "the merged element should take the place in the latest occurrence of that id"
+	return list.reduceRight((acc, current) => {
+		let wasSeenBefore = !!acc.itemsMap[current.id];
+		// Create a new object if current was not processed so far
+		// Or reference an existing item
+		let song = wasSeenBefore
+				? acc.itemsMap[current.id]
+				: new Song();
 
-	var select = function(list, options) {
-		if (!options) {
-			return list;
+		// If it's a new empty object, copy current's values; otherwise, update existing one as specified
+		song.updateBy(current);
+
+		if (!wasSeenBefore) {
+			// Add element to the beginning of the array so that the natural order of list traversing is preserved
+			acc.itemsList.unshift(song);
+			// Add reference to the same object in the itemsMap
+			acc.itemsMap[current.id] = song;
 		}
 
-		var result = options.merge? mergeList(list) : list;
+		return acc;
+	}, {
+		itemsMap: Object.create(null),
+		itemsList: []
+	}).itemsList;
+}
 
-		return result.filter( e => {
-			var check = true;
-			check = options.id ? e.id === options.id : true;
-			check &= options.minPlayTime ? e.playTime >= options.minPlayTime : true;
-			check &= options.auto ? e.auto === options.auto : true;
-
-			return check;
-		});
-	}
-
-	return {
-		select: select
-	}
+var usage = function() {
+	let items = [
+		{ id: 8, playTime:  500, auto: false },
+		{ id: 7, playTime: 1500, auto: true  },
+		{ id: 1, playTime:  100, auto: true  },
+		{ id: 7, playTime: 1000, auto: false },
+		{ id: 7, playTime: 2000, auto: false },
+		{ id: 2, playTime: 2000, auto: true  },
+		{ id: 2, playTime: 2000, auto: true  }
+	];
+	
+	console.log('select(items)', select(items).toListString());
+	console.log('select(items, { merge: true })', select(items, { merge: true }).toListString());
+	console.log('select(items, { id: 2 })', select(items, { id: 2 }).toListString());
+	console.log('select(items, { auto: false })', select(items, { auto: false }).toListString());
+	console.log('select(items, { minPlayTime: 4000 })', select(items, { minPlayTime: 4000 }).toListString());
+	console.log('select(items, { merge: true, minPlayTime: 4000 })', select(items, { merge: true, minPlayTime: 4000 }).toListString());
 }
 
 Array.prototype.toListString = function() {
 	return JSON.stringify(this, null, 4);
 }
-/*
-if(window.console && console.log){
-    var old = console.log;
-    console.log = function(){
-        Array.prototype.unshift.call(arguments, 'arg' + arguments[0]);
-        old.apply(this, arguments)
-    }
-}
-*/
 
-var solution = new soundcloud.aggregate();
-
-var items = [
-    { id: 8, playTime:  500, auto: false },
-    { id: 7, playTime: 1500, auto: true  },
-    { id: 1, playTime:  100, auto: true  },
-    { id: 7, playTime: 1000, auto: false },
-    { id: 7, playTime: 2000, auto: false },
-    { id: 2, playTime: 2000, auto: true  },
-    { id: 2, playTime: 2000, auto: true  }
-]
-
-console.log(solution.select(items, { merge: true }).toListString());
-console.log(solution.select(items, { id: 2 }).toListString());
-console.log(solution.select(items, { minPlayTime: 4000 }).toListString());
-console.log(solution.select(items, { merge: true, minPlayTime: 4000 }).toListString());
+exports.select = select;
+exports.select.usage = usage;

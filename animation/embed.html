@@ -1,38 +1,37 @@
 <!doctype html>
 <html>
 <head>
-	<title>{{bandName}} {{curentSong}}</title>
+	<title>Bondax | SoundCloud</title>
 	<link rel="stylesheet" type="text/css" href="app.css">
 	<script src="app.js"></script>
 </head>
 <body>
 	<div id="mainContent">
-			<div class="user-profile">
-				<div class="background"> <img src="assets/avatar.jpg" /></div>
-				<div class="profile controls">
-					<button src="assets/play.svg" class="button play" />
-				</div>
-				<div class="band-info">
-					<div class="band-name"><h1>The whooper trooper</h1></div>
-					<div class="band-location"><h2>Palilula</h2></div>
-				</div>
+		<div id="user-profile" class="user-profile">
+			<div class="background"> <img src="assets/avatar.jpg" /></div>
+			<div id="profile-controls" class="profile controls">
+				<button src="assets/play.svg" class="button play" />
 			</div>
+			<div class="band-info">
+				<div class="band-name"><h1>Bondax</h1></div>
+				<div class="band-location"><h2>Lancaster, Critain (UK)</h2></div>
+			</div>
+		</div>
 
-			<div class="playing-mode">
-				<div class="background"> <img src="assets/artwork.jpg" /></div>
-				<div class="overlay hide"></div>
-				<div class="band-info">
-					<div class="band-name"><h2>The whooper trooper</h2></div>
-					<div class="current-song"><h1>Laundry</h1></div>
-				</div>
-				<div class="controls">
-					<button src="assets/play.svg" class="button play hide" />
-					<button src="assets/pause.svg" class="button pause fadeTransition" />
-				</div>
-				<div class="song-waveform">
-					<canvas id="demo" width=900 height=70></canvas>
-				</div>
+		<div id="playing-mode" class="playing-mode">
+			<div class="background"> <img src="assets/artwork.jpg" /></div>
+			<div id="overlay" class="overlay hide"></div>
+			<div class="band-info">
+				<div class="band-name"><h2>Bondax</h2></div>
+				<div class="current-song"><h1>Gold</h1></div>
 			</div>
-  </div>
+			<div class="controls">
+				<button class="button pause" />
+			</div>
+			<div class="song-waveform">
+				<img src="assets/waveform.png" class="waveform"/>
+			</div>
+		</div>
+	</div>
 </body>
 </html>

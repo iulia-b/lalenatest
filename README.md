@@ -17,11 +17,13 @@ The reason I create `itemsMap: Object.create(null)` is to ensure that itemsMap h
 I am using class Song instead of simple object more as a proof of concept that in a bigger context I can add properties, methods and can easily extend it. Also because types are your friends :)
 
 In order to run the method, open a node.js shell in current directory and run
-	<i>var solution = require('/aggregate.js');</i>i>
+	<i>var solution = require('./aggregate/aggregate.js');</i>
+	<i> var items = require('./aggregate/sample-data.json');</i>
 You can then run
-	<i>solution.select(list, [, options])</i>
+	<i>solution.select(items, [, options])</i>
 	 or
 	solution.select.usage() so see examples of how to call it
+
 
 
 Side note: I like how in the tests for select you did not add { auto: false }. I initially checked the filter existence by if (!object.auto) which would return true for both false and undefined and would eventually not work for the {auto: false} filter

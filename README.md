@@ -17,14 +17,26 @@ The reason I create `itemsMap: Object.create(null)` is to ensure that itemsMap h
 I am using class Song instead of simple object more as a proof of concept that in a bigger context I can add properties, methods and can easily extend it. Also because types are your friends :)
 
 In order to run the method, open a node.js shell in current directory and run
-	var solution = require('/aggregate.js');
+	<i>var solution = require('/aggregate.js');</i>i>
 You can then run
-	solution.select(list, [, options])
+	<i>solution.select(list, [, options])</i>
 	 or
 	solution.select.usage() so see examples of how to call it
 
 
 Side note: I like how in the tests for select you did not add { auto: false }. I initially checked the filter existence by if (!object.auto) which would return true for both false and undefined and would eventually not work for the {auto: false} filter
+
+
+### Animation
+
+The idea behind was to give the impression of looking at a vinyl cover (nostalgic :) ). You look around, you find the band that you like and when pressing Play the cover slides up and the record is unveiled. I like this experience as it creates the impression of an upgraded, digitalized visit in a records store. 
+
+Th HMTL can be made a template and rendered in a list of bands etc.
+
+The view is responsive to any width and height, but of course looks best for standard viewPort sizes. The waveform format is not the most desirable and I would def use the one from task #3 (which also has the seek implemented).
+
+The css can be found in app.css and the js need in app.js. The two files are loaded in the header of embed.html
+
 
 
 ### Original Waveform feedback (my notes)

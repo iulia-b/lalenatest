@@ -1,5 +1,7 @@
 # SoundCloud challenge.  
 
+
+
 ### Aggregate 
 
 This solution is O(n) time and space complexity. For the merge implementation I am looping once through the initial list using reduceRight (`right` in order to satisfy the "merge into last occurence" condition) and inserting new item into beginning of accumulator array (to preserve the natural list transversion). 
